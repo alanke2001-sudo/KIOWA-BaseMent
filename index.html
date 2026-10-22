@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>OH-58D 技術資料庫</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="以公開發行（Distribution A）文件整理的 OH-58D Kiowa Warrior 技術資料庫：構型、動力旋翼、航電任務裝備、武裝、性能限制、操作程序與縮寫對照，每筆附出處。">
+<style>
+/* Layout: sticky search bar on top; left index rail (desktop) + entry column; entries read like TM paragraphs with a reference strip. */
+:root{
+  --bg:#f3f4ef; --surface:#fbfbf8; --ink:#1d211b; --muted:#5d6458; --line:#d5d9cd;
+  --accent:#8a5a00; --accent-soft:#f3e6c8; --khaki:#4d5a3a;
+  --ok:#2f6b3a; --ok-bg:#e1eedf; --pend:#8a5a00; --pend-bg:#f6e9cc; --sec:#3b5878; --sec-bg:#e1e9f2; --der:#6a4a7a; --der-bg:#ece3f1;
+  --warn:#9b2c1f; --warn-bg:#f7e2dd; --mark:#ffe08a;
+  --f-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei","Heiti TC",system-ui,sans-serif;
+  --f-head:"Noto Serif TC","Songti TC","PMingLiU",Georgia,serif;
+  --f-mono:"JetBrains Mono","SFMono-Regular",Consolas,"Liberation Mono",monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#161915; --surface:#1e221c; --ink:#e4e7de; --muted:#9ba393; --line:#343a30;
+  --accent:#e0a53a; --accent-soft:#3a2f17; --khaki:#a9b98c;
+  --ok:#8fcf95; --ok-bg:#1f3322; --pend:#e8b85a; --pend-bg:#3a2f17; --sec:#9bbbe0; --sec-bg:#1d2a3a; --der:#cfa9e2; --der-bg:#30243a;
+  --warn:#f09a8a; --warn-bg:#3a201b; --mark:#6b5410; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#161915; --surface:#1e221c; --ink:#e4e7de; --muted:#9ba393; --line:#343a30;
+  --accent:#e0a53a; --accent-soft:#3a2f17; --khaki:#a9b98c;
+  --ok:#8fcf95; --ok-bg:#1f3322; --pend:#e8b85a; --pend-bg:#3a2f17; --sec:#9bbbe0; --sec-bg:#1d2a3a; --der:#cfa9e2; --der-bg:#30243a;
+  --warn:#f09a8a; --warn-bg:#3a201b; --mark:#6b5410; color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{background:var(--bg);color:var(--ink);font:15px/1.7 var(--f-body)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header.top{background:var(--surface);border-bottom:1px solid var(--line)}
+header.top .wrap{padding-block:28px 18px;display:grid;gap:10px}
+.eyebrow{font:600 12px/1 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--khaki)}
+h1{font:700 clamp(26px,4.2vw,38px)/1.2 var(--f-head);margin:0;text-wrap:balance}
+h1 small{display:block;font:500 15px/1.5 var(--f-body);color:var(--muted);margin-top:6px}
+.notice{border:1px solid var(--line);background:var(--bg);border-radius:6px;padding:10px 14px;font-size:13.5px;color:var(--muted);max-width:80ch}
+.notice b{color:var(--ink)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
+.bar .wrap{padding-block:10px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+#q{flex:1 1 260px;min-width:0;font:15px var(--f-body);padding:9px 12px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:12.5px/1 var(--f-body);padding:7px 10px;border-radius:999px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+#count{font:12.5px var(--f-mono);color:var(--muted);font-variant-numeric:tabular-nums}
+#theme{margin-left:auto}
+.layout{display:grid;grid-template-columns:220px minmax(0,1fr);gap:32px;padding-block:24px 64px}
+nav.toc{position:sticky;top:calc(env(safe-area-inset-top,0px) + 70px);align-self:start;max-height:calc(100vh - 100px);overflow:auto;font-size:13.5px}
+nav.toc ol{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+nav.toc a{display:flex;justify-content:space-between;gap:8px;text-decoration:none;color:var(--ink);padding:5px 8px;border-radius:4px}
+nav.toc a:hover{background:var(--accent-soft)}
+nav.toc .n{font:12px var(--f-mono);color:var(--muted);font-variant-numeric:tabular-nums}
+main{min-width:0}
+section.sec{margin-bottom:40px}
+section.sec>h2{font:700 22px/1.3 var(--f-head);margin:0 0 4px;display:flex;gap:10px;align-items:baseline}
+section.sec>h2 .no{font:600 13px var(--f-mono);color:var(--accent)}
+section.sec>p.lead{color:var(--muted);margin:0 0 14px;max-width:72ch}
+.entries{display:grid;gap:12px}
+article.e{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:14px 16px 12px;min-width:0}
+article.e h3{font:700 16.5px/1.4 var(--f-body);margin:0;display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}
+article.e h3 .en{font:500 13px var(--f-mono);color:var(--muted)}
+.body{margin-top:6px;max-width:75ch}
+.body p{margin:6px 0}
+.body ul{margin:6px 0;padding-left:1.3em}
+.tbl{overflow-x:auto;margin-top:8px}
+table{border-collapse:collapse;font-size:13.5px;min-width:100%}
+th,td{border-bottom:1px solid var(--line);padding:5px 10px 5px 0;text-align:left;vertical-align:top}
+th{font-weight:600;color:var(--muted);white-space:nowrap}
+td.num,th.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.ref{margin-top:10px;padding-top:8px;border-top:1px dashed var(--line);display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;font:12.5px/1.5 var(--f-mono);color:var(--muted)}
+.tag{font:600 11.5px/1 var(--f-body);padding:4px 7px;border-radius:4px;white-space:nowrap}
+.t-ok{background:var(--ok-bg);color:var(--ok)}
+.t-pend{background:var(--pend-bg);color:var(--pend)}
+.t-sec{background:var(--sec-bg);color:var(--sec)}
+.t-der{background:var(--der-bg);color:var(--der)}
+.box{border-left:3px solid var(--warn);background:var(--warn-bg);padding:6px 10px;margin:8px 0;border-radius:0 4px 4px 0;font-size:14px}
+.box b{color:var(--warn)}
+mark{background:var(--mark);color:inherit;border-radius:2px}
+.empty{padding:40px 0;color:var(--muted)}
+.gl{columns:2 320px;column-gap:28px;font-size:13.5px}
+.gl div{break-inside:avoid;padding:3px 0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:7.5em minmax(0,1fr);gap:8px}
+.gl code{font:600 13px var(--f-mono);color:var(--accent)}
+.legend{display:flex;flex-wrap:wrap;gap:8px 14px;font-size:13px;color:var(--muted);align-items:center}
+footer{border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+footer .wrap{padding-block:20px}
+@media (max-width:860px){.layout{grid-template-columns:minmax(0,1fr)}nav.toc{position:static;max-height:none}nav.toc ol{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}}
+@media (prefers-reduced-motion:no-preference){article.e{transition:border-color .15s}article.e:hover{border-color:var(--khaki)}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <div class="eyebrow">OH-58D Kiowa Warrior · Reference Database</div>
+  <h1>OH-58D 技術資料庫<small>以公開發行文件整理，每筆附出處章節，供飛行教學與研究查閱</small></h1>
+  <div class="notice"><b>使用前請讀：</b>本資料庫只收錄封面標示 Distribution A／Approved for public release 的文件，內容為整理者以自己的文字摘要，不是原文轉載，也不能取代現行版 TM 1-1520-248-10 與 -CL。飛行操作一律以單位現行有效手冊為準。標「待核」的條目來自先前研究筆記，尚待原書逐頁核對。</div>
+  <div class="legend"><span class="tag t-ok">已核</span>已對照原文 <span class="tag t-pend">待核</span>待原書重新核對 <span class="tag t-sec">二手</span>轉錄自公開研究報告 <span class="tag t-der">推導</span>由手冊數值計算</div>
+</div></header>
+
+<div class="bar"><div class="wrap">
+  <label for="q" class="eyebrow" style="position:absolute;left:-9999px">搜尋</label>
+  <input id="q" type="search" placeholder="搜尋：例如 滯空、MMS、Task 1030、NR、TGT…" autocomplete="off">
+  <div class="chips" id="stchips"></div>
+  <span id="count"></span>
+  <button class="chip" id="theme" type="button" aria-label="切換深淺色">深／淺色</button>
+</div></div>
+
+<div class="wrap layout">
+  <nav class="toc" aria-label="目錄"><ol id="toc"></ol></nav>
+  <main id="main"></main>
+</div>
+
+<footer><div class="wrap">整理：B300（OH-58D 飛行教官）協同 Claude，2026-10-22 版。資料來源與分發等級見「來源文件」一節。本頁為單一 HTML 檔，不需任何外部資源，可直接放上 GitHub Pages。</div></footer>
+
+<script>
+const SRC={
+ TC:"TC 1-248 Aircrew Training Manual OH-58D（2007-04-12）",
+ CL:"TM 1-1520-248-CL Operator's & Crewmember's Checklist（1999-04-30，含 C1 2000-06-15）",
+ T7:"TM 55-2840-256-23 T703 渦輪軸發動機維修手冊（1986-06-02，含 C9 1998）",
+ AA:"Air Assault School Handbook FY2013（Warrior Training Center）",
+ FM:"FM 1-140 Helicopter Gunnery（1996-03-29）",
+ TM10:"TM 1-1520-248-10 Operator's Manual（2001-11-15 版）",
+ ARL:"ARL-TR-3180, Kim (2004)",
+ BER:"Berger et al. (2011), AHS 67th Forum",
+ DEQ:"Dequin (2019), 45th ERF Paper 17",
+ FFX:"Nixon (2025), Flightfax Special Edition"
+};
+const ST={ok:["已核","t-ok"],pend:["待核","t-pend"],sec:["二手","t-sec"],der:["推導","t-der"]};
+const SECS=[
+ ["about","關於本資料庫","收錄範圍、分發等級與使用方式。"],
+ ["config","構型與系列","OH-58D 與 OH-58D(R) 的差異，以及命名規則。"],
+ ["airframe","機體與尺寸","外形尺寸與與機體高度相關的操作數值。"],
+ ["power","動力與旋翼","T703 發動機、主旋翼與尾旋翼。"],
+ ["avionics","航電與任務裝備","MMS、CDS、導航、通信與存活裝備（只列公開概述）。"],
+ ["arms","武裝（公開概述）","武器種類、開火模式與公開教範中的射程概值。"],
+ ["perf","性能與限制","滯空功率檢查、風限、方向操控與性能圖表重點。"],
+ ["ops","操作程序：ATM 科目","TC 1-248 主要科目的條件與標準，以中文摘要呈現。"],
+ ["emer","緊急程序摘要","依 -CL 緊急程序整理處置邏輯；記憶步驟以現行 CL 為準。"],
+ ["lte","專題：尾旋翼與非預期偏航","LTE／unanticipated yaw 的公開研究觀點，與 OH-58 機系的關係。"],
+ ["gloss","縮寫對照","TC 1-248 Glossary 與 -CL 常見縮寫。"],
+ ["refs","來源文件","每份文件的版次、分發等級與收錄狀態。"]
+];
+const E=[
+/* ---------- about ---------- */
+{s:"about",t:"收錄原則",en:"Scope",st:"ok",b:`<p>只收錄封面寫明 <b>Distribution A</b> 或 <b>Approved for public release; distribution is unlimited</b> 的文件。Distribution B、C、D 或限 DoD 的文件（例如 2007 年版 -10、MTF、MMS 維修技令）一律不收錄、不摘錄。</p><p>內容以整理者自己的文字改寫，數值保留原單位並附 SI 換算；術語依陸航教學習慣，hover 譯「滯空」、autorotation 譯「自轉」。</p>`,r:[]},
+{s:"about",t:"狀態標記的意思",en:"Status tags",st:"ok",b:`<ul><li><b>已核</b>：本次整理時逐字對照原文件。</li><li><b>待核</b>：TM 1-1520-248-10（2001 版）的內容，取自先前論文研究筆記；原 PDF 須重新取得後逐頁核對。</li><li><b>二手</b>：轉錄自公開研究報告（例如 ARL-TR-3180），建議引用前對照原報告。</li><li><b>推導</b>：由手冊數值計算而得，非手冊直接給出。</li></ul>`,r:[]},
+/* ---------- config ---------- */
+{s:"config",t:"OH-58D 與 OH-58D(R) 兩個系列",en:"Aircraft series",st:"ok",b:`<p>TC 1-248 把機隊分成兩個系列，資格訓練分開規定：</p><div class="tbl"><table><tr><th>系列</th><th>控制顯示系統</th><th>燃油控制</th><th>發動機</th><th>專屬科目</th></tr><tr><td>OH-58D</td><td>CDS2（MCPU）</td><td>ESC 電子監督控制＋液壓機械燃油控制，可切 ANLG 備份</td><td>T703-AD-700 系列</td><td>Task 1100 類比油門操作</td></tr><tr><td>OH-58D(R)</td><td>CDS4（含 JVMF、EGI 等）</td><td>FADEC，可切 MAN 手動</td><td>250-C30R 系列</td><td>Task 1102 FADEC 手動油門</td></tr></table></div><p>由 OH-58D(R) 轉 OH-58D 的人員，課堂須涵蓋 IMSP、CDS2 MCPU、ESC；飛行須通過 Task 1100 等 10 個科目。反向轉換則須 3.0 小時以上熱座艙訓練與 6.0 小時飛行。</p>`,r:[["TC","2-1 b–c；附錄 A-1、A-2（A-1～A-3）"]]},
+{s:"config",t:"現行性：兩系列互通規定",en:"Currency",st:"ok",b:`<p>兩系列都具資格者，維持 OH-58D(R) 現行即視同 OH-58D 現行；只維持 OH-58D 現行者，須先通過 Task 1102 的熟練度考核，才算 OH-58D(R) 現行。</p>`,r:[["TC","2-4 b（p. 2-4）"]]},
+{s:"config",t:"美軍旋翼機命名規則",en:"AR 70-50 designation",st:"ok",b:`<p>第一個字母表示基本任務（OH＝觀測），第二個字母 H 表示直升機，數字為設計序號（58＝Kiowa），尾碼字母為系列。OH-58A 為 Kiowa，OH-58D 稱 Kiowa Warrior。</p>`,r:[["AA","Part II Rotary Wing Aircraft Overview（p. 34）"]]},
+{s:"config",t:"CL 中的雙版本程序",en:"ESC vs FADEC procedures",st:"ok",b:`<p>-CL 的發動機超速、轉速不足等程序各有兩版：ESC 機型用 <b>NORM–ANLG BACKUP</b> 開關切類比備份；FADEC 機型改為執行 <b>FADEC MANUAL OPERATION</b>。查閱時先確認自己機型對應的版本。</p>`,r:[["CL","E-2、E-3"]]},
+/* ---------- airframe ---------- */
+{s:"airframe",t:"外形尺寸（公開教範標示值）",en:"Dimensions",st:"ok",b:`<div class="tbl"><table><tr><th>項目</th><th class="num">英制</th><th class="num">SI</th></tr><tr><td>主旋翼直徑</td><td class="num">35 ft</td><td class="num">10.67 m</td></tr><tr><td>全長（圖示標註）</td><td class="num">41 ft 2 in</td><td class="num">12.55 m</td></tr><tr><td>尾旋翼直徑</td><td class="num">5 ft 5 in</td><td class="num">1.65 m</td></tr><tr><td>高度（圖示標註）</td><td class="num">12 ft 11 in</td><td class="num">3.94 m</td></tr><tr><td>另一標註尺寸</td><td class="num">7 ft 3 in</td><td class="num">2.21 m</td></tr></table></div><p>手冊圖面標註未說明 7 ft 3 in 對應的部位，應以 -10 圖 2-2 確認。</p>`,r:[["AA","Part II OH-58D Kiowa Warrior（p. 16）"]]},
+{s:"airframe",t:"-10 圖 2-2 主要尺寸",en:"TM -10 Fig 2-2",st:"pend",b:`<div class="tbl"><table><tr><th>項目</th><th class="num">in</th><th class="num">m</th></tr><tr><td>主旋翼直徑</td><td class="num">420.0</td><td class="num">10.67</td></tr><tr><td>尾旋翼直徑</td><td class="num">65.0</td><td class="num">1.651</td></tr><tr><td>旋翼轉動時全長</td><td class="num">486.4</td><td class="num">12.35</td></tr><tr><td>水平安定面翼展</td><td class="num">89.9</td><td class="num">2.28</td></tr></table></div><p>主旋翼軸前傾 5°、左傾 1°。</p>`,r:[["TM10","圖 2-2"]]},
+{s:"airframe",t:"尾力臂估算",en:"Tail rotor moment arm l_TR",st:"der",b:`<p>以圖 2-2 全長扣除主旋翼半徑與尾旋翼半徑：</p><p style="font-family:var(--f-mono)">l<sub>TR</sub> ≈ 486.4 − 210.0 − 32.5 = 243.9 in ≈ 6.20 m</p><p>假設尾旋翼軸與主軸位於同一縱向平面，誤差約 ±0.3 m。</p>`,r:[["TM10","圖 2-2（推導）"]]},
+{s:"airframe",t:"滑橇到 MMS 頂端高度與穿越電線下方",en:"Wire underflight clearance",st:"ok",b:`<p>機體由滑橇底到桅頂觀測儀（MMS）頂端約 <b>13 ft（約 4.0 m）</b>。從電線下方穿越時，電線最低點離地須至少 <b>25 ft＋滯空高度</b>：例如滯空 5 ft，電線最低點須在 30 ft（9.1 m）以上，MMS 與電線之間仍有約 12 ft 餘裕。夜視鏡條件下，未經日間勘查的地點不做穿越電線下方訓練。</p>`,r:[["TC","Task 1155（p. 4-59～4-60）"]]},
+{s:"airframe",t:"降落點尺寸分級",en:"Landing point size",st:"ok",b:`<p>OH-58D 屬第 1 級降落點：淨空圓形區直徑 <b>25 m</b>（與 MH-6J、UH-72A 同級）；UH-60／AH-64 為 50 m。</p>`,r:[["AA","Part III Aircraft Safety, LZ/PZ Selection"]]},
+{s:"airframe",t:"防電線撕裂裝置與機身檢查重點",en:"Preflight structure items",st:"ok",b:`<p>-CL 的外部檢查依序繞機：前機身右側、中機身右側、尾桁右側與後方（尾旋翼齒輪箱、尾旋翼）、尾桁左側、中機身左側、機頂（排氣、液壓、斜盤、主旋翼、MMS）、前機身左側與機頭。CAUTION：後橫管中央固定螺栓若缺少側向搖擺自由度，可能導致地面共振（ground resonance）。</p>`,r:[["CL","N-1～N-5"]]},
+/* ---------- power ---------- */
+{s:"power",t:"T703-AD-700 系列發動機",en:"Turboshaft engine",st:"ok",b:`<div class="tbl"><table><tr><th>項目</th><th>內容</th></tr><tr><td>設計起飛功率</td><td class="num">650 shp（485 kW）</td></tr><tr><td>壓縮機</td><td>單級離心式</td></tr><tr><td>燃燒室</td><td>罐式（can-type）</td></tr><tr><td>渦輪</td><td>共 4 級：2 級燃氣產生器渦輪（N<sub>g</sub>）＋2 級動力渦輪（N<sub>p</sub>）</td></tr><tr><td>附件齒輪箱</td><td>兩組齒輪系（燃氣產生器、動力渦輪），為發動機主結構件</td></tr><tr><td>尺寸 L×H×W</td><td class="num">43.2 × 25.1 × 22.0 in（1.10 × 0.64 × 0.56 m）</td></tr><tr><td>最大乾重（含 ESC）</td><td class="num">252 lb（114 kg）；-700B 為 255 lb</td></tr><tr><td>控制</td><td>機體裝設的電子監督控制（ESC）；吸入式燃油泵</td></tr></table></div><p>650 shp 是發動機上限；實際操作限制在傳動系統與主軸扭力（mast torque），以 -10 第 5 章為準。</p>`,r:[["T7","1-7、1-9、1-11（p. 1-2～1-5）"]]},
+{s:"power",t:"核准燃油",en:"Fuels",st:"ok",b:`<p>可無限制使用：JP-4、JP-5、JP-8、Jet A、Jet A-1、Jet B、北極柴油 DF-A。4 °C（40 °F）以下冷天起動建議用 JP-4 或 Jet B。</p>`,r:[["T7","1-11 Equipment Data"]]},
+{s:"power",t:"主旋翼參數",en:"Main rotor",st:"sec",b:`<div class="tbl"><table><tr><th>參數</th><th class="num">值</th></tr><tr><td>槳葉數 b</td><td class="num">4（複合材料）</td></tr><tr><td>半徑 R</td><td class="num">17.5 ft（5.334 m）</td></tr><tr><td>轉速（100 % NR）</td><td class="num">395 rpm（41.36 rad/s）</td></tr><tr><td>槳尖速度 ΩR</td><td class="num">723.9 ft/s（220.6 m/s）</td></tr><tr><td>平均弦長 c</td><td class="num">0.786 ft（0.240 m）</td></tr><tr><td>實度 σ</td><td class="num">0.057</td></tr><tr><td>扭轉角 θ<sub>tw</sub></td><td class="num">−12°</td></tr><tr><td>預錐角 β<sub>p</sub></td><td class="num">2°</td></tr><tr><td>槳盤面積 A</td><td class="num">962 ft²（89.4 m²）</td></tr></table></div><p>檢算：σ = bc/(πR) = 4×0.786/(π×17.5) = 0.0572。</p>`,r:[["ARL","主旋翼參數表"]]},
+{s:"power",t:"旋翼構型",en:"Rotor configuration",st:"pend",b:`<p>主旋翼為 4 葉複合材料槳葉；尾旋翼為 2 葉翹翹板式（teetering）。與 OH-58A/C 的 2 葉主旋翼相比，振動較低，也讓桅頂觀測儀的影像較穩。</p>`,r:[["TM10","2-5"]]},
+{s:"power",t:"轉速符號 NR／Np／Ng",en:"Speed terms",st:"ok",b:`<ul><li><b>N<sub>r</sub></b>（rotor speed）：主旋翼轉速，正常 100 %。</li><li><b>N<sub>p</sub></b>（power turbine speed）：動力渦輪轉速，與旋翼同步時與 NR 一致。</li><li><b>N<sub>g</sub></b>（gas generator speed）：燃氣產生器轉速；地面慢車穩定在 63～65 % NG。</li></ul>`,r:[["TC","Glossary"],["CL","P-2"]]},
+{s:"power",t:"發動機起動（ESC 機型）重點數值",en:"Engine start",st:"ok",b:`<ul><li>按住 START 前 TGT 須 ≤ 150 °C；起動中 BATT V 低於 10 V 即中止。</li><li>約 12 % NG 時緩推油門，以油門調節讓 TGT 不超限；初始峰值下降後再推到慢車。</li><li>旋翼應在 25 % NG 前開始轉動；55 % NG 放開 START。</li><li>慢車 NG 穩定在 63～65 %。推油門前電瓶電壓須至少 14 V。</li><li>若在 55 % NG 前就看得出溫度會超限，中止起動。</li></ul>`,r:[["CL","P-1～P-2"]]},
+{s:"power",t:"FADEC 自動起動差異",en:"FADEC auto start",st:"ok",b:`<p>油門推到慢車卡榫後，須在 60 秒內按 START（按 2 秒放開），否則系統不會起動；要重新起動須把油門收到 cutoff，並把 FADEC 斷路器開關關再開。NG 到 10 % 時電瓶電壓須達 14 V，START V 在 50 % NG 時應降到接近 0。</p>`,r:[["CL","P-2～P-5"]]},
+{s:"power",t:"類比備份（ANLG）模式",en:"ESC analog backup",st:"ok",b:`<p>切到 ANLG 時，RPM 微調開關、總距預估（collective anticipation）、起動溫度限制與轉速突波保護全部失效，油門須保持全開。訓練規定：切換前高於最高障礙物 500 ft（AHO），切回數位模式時主軸扭力 ≤ 60 %；ANLG 模式下不做需要 OGE 能力的動作。切換瞬間會感到 NR／NP 短暫下降。</p>`,r:[["TC","Task 1100（p. 4-53～4-54）"]]},
+{s:"power",t:"FADEC 手動油門（OH-58D(R)）",en:"FADEC manual throttle",st:"ok",b:`<p>MAN 模式下 NP／NG 調速、TGT 限制、扭力限制、突波偵測與熄火自動再點火都不存在，須平順協調油門與總距。訓練限制：只在日間、地面風 ≤ 20 kt、陣風差 ≤ 10 kt、亂流不超過輕度；標準為 NR／NP 100 % ± 5 %。WARNING：最後進場時 NR 低於 95 % 可能造成無法改出的下降率。油門上的指標約對應 75° PLA、約 315 lb/h 燃油流量。</p>`,r:[["TC","Task 1102（p. 4-55）；附錄 B（B-1～B-5）"]]},
+/* ---------- avionics ---------- */
+{s:"avionics",t:"桅頂觀測儀 MMS",en:"Mast-Mounted Sight",st:"ok",b:`<p>位於主旋翼上方的球形感測器，包含電視（TV）、熱像（TIS）與雷射測距標定器（LRF/D）。機體隱蔽在地形或樹林後時，只需露出 MMS 即可觀測。操作重點：</p><ul><li>MMS 運轉但不用時，視線應從動到正前方（slaved FWD），避免撞擊方位／俯仰止擋。</li><li>MMS 起動需要交流發電機或外部 AC 三相電源。</li><li>關車時，在 NP 降到 95 % 以下之前先關 MMS。</li></ul>`,r:[["CL","P-5～P-7；N-10"],["TC","Task 1300、1410"]]},
+{s:"avionics",t:"MMS 校軸（boresight）",en:"Boresight",st:"ok",b:`<p>自動校軸只在 TV 與 TIS 的窄視野（NFOV）進行；手動校軸可在寬、窄視野進行，且應先寬後窄、一次一個感測器。以下情況建議先手動校軸：電源週期內第一次自動校軸前、切換視野或感測器時十字線偏離目標、自動校軸後仍顯示 REBORESIGHT。</p>`,r:[["CL","P-7～P-9"]]},
+{s:"avionics",t:"空中校準（airborne calibration）",en:"Airborne cal",st:"ok",b:`<p>每次飛行應確認校準精度；只有在預指（prepoint）目標未落在窄視野內時才執行。要點：在距已知座標目標至少 <b>3 km</b> 處滯空，先讓目標位於機身右側 90° 以外，再以不超過 <b>5°/s</b> 的右踏板轉向讓目標到左側 90° 以外。方位誤差大但俯仰正常時，可能是 EGI 航向誤差，應從頭重做。</p>`,r:[["CL","Airborne Calibration（P-24～P-25）"]]},
+{s:"avionics",t:"控制與顯示系統 CDS／MFD",en:"CDS",st:"ok",b:`<p>座艙每位飛行員各有一具多功能顯示器（MFD），搭配多功能鍵盤（MFK）操作導航、通信、武器與 MMS 頁面。OH-58D 用 CDS2（MCPU），OH-58D(R) 用 CDS4。MCPU 失效時先拔插斷路器，無法恢復則儘速落地。</p>`,r:[["TC","附錄 A"],["CL","E-9"]]},
+{s:"avionics",t:"導航：EGI 與 GPS 發散處置",en:"Navigation",st:"ok",b:`<p>EGI 為嵌入式 GPS／慣性導航。GPS 發散（GPS DIVERGENT）時先選 INS 模式並與已知航點比對：有誤差就手動更新修正 INS 漂移；無誤差再回 GPS 模式。EGI 失效則拔插斷路器、輸入最後已知位置並手動對準。</p>`,r:[["CL","E-8～E-9"]]},
+{s:"avionics",t:"數位通信與影像交換",en:"IDM / BFT / VIXL",st:"ok",b:`<p>改良式數據機（IDM）與藍軍追蹤（BFT）用於態勢顯示、空中任務收發與訊息；VIXL 可擷取、傳送與接收 MMS 影像。可對砲兵、AH-64D 與其他 OH-58 執行數位射擊請求。</p>`,r:[["TC","Task 1142、1164"],["AA","p. 16"]]},
+{s:"avionics",t:"夜視鏡與 ADSS",en:"ANVIS / ADSS",st:"ok",b:`<p>ADSS（ANVIS display symbology subsystem）把姿態、高度、空速等符號疊在夜視鏡畫面上。TC 1-248 幾乎每個滯空與低空科目都提醒：夜視鏡條件下以 ADSS 輔助偵測飄移、保持姿態與高度。</p>`,r:[["TC","Task 1304 與各科目 NVG considerations"]]},
+{s:"avionics",t:"機載存活裝備（概述）",en:"ASE",st:"ok",b:`<p>依構型可裝雷達警告（AN/APR-39A(V)1、AN/APR-44）、雷射警告（AN/AVR-2A）、紅外線干擾器（AN/ALQ-144）與敵我識別詢答機（APX-100／APX-118）。本資料庫不收錄設定與威脅反應細節。</p>`,r:[["TC","Task 1188"],["CL","P-13～P-18"]]},
+/* ---------- arms ---------- */
+{s:"arms",t:"武器種類與公開射程概值",en:"Armament",st:"ok",b:`<div class="tbl"><table><tr><th>武器</th><th class="num">載量</th><th class="num">最小</th><th class="num">最大</th><th class="num">最大有效</th></tr><tr><td>.50 口徑機槍（僅左側）</td><td class="num">500 發</td><td></td><td class="num">2,000 m</td><td></td></tr><tr><td>2.75 吋折翼火箭 FFAR</td><td class="num">14 枚</td><td></td><td class="num">9,000 m</td><td class="num">2,000～5,000 m</td></tr><tr><td>Hellfire II 雷射導引</td><td class="num">4 枚</td><td class="num">500 m</td><td class="num">8,000 m</td><td></td></tr><tr><td>空對空 Stinger（ATAS）</td><td class="num">4 枚</td><td class="num">1 km</td><td class="num">8 km</td><td></td></tr></table></div><p>為訓練手冊彙整的概值，實際以武器系統手冊為準。</p>`,r:[["AA","p. 16"]]},
+{s:"arms",t:"三種開火模式",en:"Modes of fire",st:"ok",b:`<ul><li><b>滯空射擊（hover fire）</b>：在 ETL 以下進行的接戰，分靜止滯空與低速移動兩種。</li><li><b>行進間射擊（running fire）</b>：ETL 以上、向前飛行中射擊；前進速度提高平台穩定，對火箭精度尤其有利。</li><li><b>俯衝射擊（diving fire）</b>：在俯衝剖面中直接射擊；優點是降低小口徑火力威脅、功率需求較低可多掛彈、下洗流對彈藥影響小、彈著散布區較小。</li></ul><p>TC 1-248 建議行進間射擊的最低速度接近最大爬升率空速，以保留加速脫離的功率。</p>`,r:[["FM","7-2"],["TC","Task 1422（p. 4-103～4-105）"]]},
+{s:"arms",t:".50 口徑彈道概值",en:".50 cal ballistics",st:"ok",b:`<div class="tbl"><table><tr><th class="num">距離</th><th class="num">飛行時間</th><th class="num">彈道下墜</th></tr><tr><td class="num">1,000 m</td><td class="num">1.5 s</td><td class="num">9 mil</td></tr><tr><td class="num">1,500 m</td><td class="num">2.7 s</td><td class="num">18 mil</td></tr><tr><td class="num">2,000 m</td><td class="num">4.3 s</td><td class="num">33 mil</td></tr></table></div><p>M33 普通彈，初速約 2,910 ft/s（887 m/s）。</p>`,r:[["FM","5-2，表 5-1"]]},
+{s:"arms",t:"Hellfire 發射方式",en:"Hellfire delivery",st:"ok",b:`<p>交戰時依序決定：發射前鎖定（LOBL）或發射後鎖定（LOAL）、自主或遠距標定、發射模式（手動、正常、連發 RIPL），並選擇對應的約束驅動（constraints driver）。CDS4 訓練課目把 LOBL ±20°、LOAL ±7.5° 列為約束顯示項目。</p>`,r:[["TC","Task 1458（p. 4-110）；附錄 A 圖 A-1"]]},
+{s:"arms",t:"地面武器安全",en:"Ground safety",st:"ok",b:`<div class="box"><b>WARNING</b>　MASTER 開關在 ARMED、機上有電，且 ISP（或右 MCPU）失效或斷路器被拔時，武器可能在地面誤發。武器未確認安全前不做飛行前檢查。</div><p>只掛一枚 Hellfire 時，須掛在發射架外側滑軌。</p>`,r:[["CL","N-1；P-22"]]},
+/* ---------- perf ---------- */
+{s:"perf",t:"滯空功率檢查與起降限制",en:"Hover power check (Task 1028)",st:"ok",b:`<p>在起飛點附近、朝起飛方向建立 3 ft ± 1 ft 穩定滯空，比較實際主軸扭力與預估可用最大扭力的差值：</p><div class="tbl"><table><tr><th class="num">扭力差</th><th>可執行的起降</th></tr><tr><td class="num">&lt; 5 %</td><td>只能用最小或現有功率起飛；目的地須能做正常或較淺的進場，且地面可直接落地</td></tr><tr><td class="num">5～9 %</td><td>可做正常進場與起飛</td></tr><tr><td class="num">10～14 %</td><td>可做陡進場與儀器起飛</td></tr><tr><td class="num">≥ 15 %</td><td>無起降限制</td></tr></table></div><p>扭力差小於 15 % 時，除非先完成 OGE 滯空功率檢查，否則不得執行地貌飛行起飛、NOE、地貌進場、遮蔽／顯露、NOE 減速、山頂稜線與戰鬥位置等科目。溫度變化 5 °C、壓力高度變化 500 ft 或全重變化 200 lb 時要重做。</p>`,r:[["TC","Task 1028（p. 4-23～4-24）"]]},
+{s:"perf",t:"OGE 滯空檢查",en:"Hover OGE check (Task 1030)",st:"ok",b:`<p>機頭對風垂直上升到 50 ft 或高於周邊障礙物（取較高者）± 10 ft，飄移不超過 10 ft、航向 ± 10°；以等轉率做 <b>360° 左踏板轉向</b>，轉率不超過 90°/4 s（22.5°/s），全程監看 TGT、主軸扭力與發動機扭力，確認功率與操縱性足夠；垂直下降率不超過 200 ft/min（1.0 m/s）。對操縱性或功率有疑慮時都應做這項檢查。</p>`,r:[["TC","Task 1030（p. 4-25）"]]},
+{s:"perf",t:"標準滯空高度",en:"Normal hover heights",st:"ok",b:`<p>訓練與考核時，IGE 滯空標準高度為 3 ft，OGE 滯空為 50 ft 以上。</p>`,r:[["TC","Task 1038 Training and Evaluation（p. 4-30）"]]},
+{s:"perf",t:"方向操控能力 35 kt",en:"Directional control",st:"pend",b:`<p>-10 載明方向操控能力在所有方位角下足以應付到 35 kt。手冊未寫明此句成立的全重與密度高度條件；高密度高度、大全重與 NR 下降同時出現時，實際餘裕會變小。</p>`,r:[["TM10","7-14"]]},
+{s:"perf",t:"滯空時的側風與尾風限制",en:"Wind limits",st:"pend",b:`<ul><li>滯空時最大側風與尾風 35 kt，會因橫向重心而降低。</li><li>未裝進氣口防護罩（inlet blast shields）時，尾風上限 20 kt。</li><li>啟動發動機的風速上限 45 kt。</li></ul>`,r:[["TM10","5-18"]]},
+{s:"perf",t:"NR 下降對方向操控的影響",en:"NR droop and tail rotor",st:"pend",b:`<p>-10 圖 5-1 註記：主旋翼轉速降低時，尾旋翼轉速等比例下降，可能削弱方向操控，在高密度高度與大全重時尤其明顯。以尾旋翼推力 T ∝ Ω² 粗估，NP 降到 98 % 時推力約少 4 %（0.98² = 0.960）。</p>`,r:[["TM10","圖 5-1 註記"],["TM10","9-27（98 % NP）"]]},
+{s:"perf",t:"OGE 滯空所需主軸扭力（DA 0、100 % NR、無風）",en:"TM -10 Fig 7-4",st:"pend",b:`<div class="tbl"><table><tr><th class="num">全重 lb</th><th class="num">3,000</th><th class="num">3,500</th><th class="num">4,000</th><th class="num">4,500</th><th class="num">5,000</th><th class="num">5,500</th></tr><tr><th>kg</th><td class="num">1,361</td><td class="num">1,588</td><td class="num">1,814</td><td class="num">2,041</td><td class="num">2,268</td><td class="num">2,495</td></tr><tr><th>%Q</th><td class="num">51.0</td><td class="num">57.4</td><td class="num">65.0</td><td class="num">73.6</td><td class="num">83.3</td><td class="num">94.1</td></tr></table></div><p>由 300 dpi 圖面數位化，判讀誤差約 ±0.5 %Q。圖左另有滑橇高度 3、5、10、15 ft 的 IGE 換算線。</p>`,r:[["TM10","圖 7-4"]]},
+{s:"perf",t:"100 % 主軸扭力的絕對值",en:"Mast torque reference",st:"der",b:`<p>以圖 7-7 爬升範例（4,500 lb、爬升率 1,200 ft/min 需增加 32 %Q）並假設 ΔP ≈ W·V<sub>c</sub>：</p><p style="font-family:var(--f-mono)">ΔP = 20,017 N × 6.096 m/s = 122.0 kW → P<sub>100%</sub> ≈ 381 kW（511 shp）<br>Q<sub>100%</sub> = P/Ω ≈ 381,300 / 41.36 ≈ 9,220 N·m（約 6,800 ft·lb）</p><p>爬升效率若不為 1，誤差約 ±10 %。這是反推值，手冊沒有直接給出。</p>`,r:[["TM10","圖 7-7（推導）"]]},
+{s:"perf",t:"尾旋翼推力完全喪失",en:"Complete loss of tail rotor thrust",st:"pend",b:`<p>-10 說明空速低於約 40 kt 時側滑可能失控並開始自旋；處置是以高於最小下降率自轉空速做動力飛行，最後以滑行落地（run-on landing）著陸。高扭力槳距卡死時維持 40～70 kt，必要時手動把 NP 降到 98 %。</p>`,r:[["TM10","9-26、9-27"]]},
+{s:"perf",t:"H-V 圖",en:"Height-velocity diagram",st:"pend",b:`<p>2001 年公開版 -10 收錄 H-V 圖（圖 9-2）。Task 1030 的 50 ft OGE、0 kt 狀態落在避免區內，這也是尾旋翼需求最高的狀態。數值待原書重新取得後補上。</p>`,r:[["TM10","圖 9-2"]]},
+{s:"perf",t:"偏航阻尼導數",en:"Yaw damping N_r",st:"sec",b:`<p>系統識別結果：OH-58D 滯空時 N<sub>r</sub> ≈ −1.128 s⁻¹（全重約 5,000 lb）。此值可能包含 SCAS 的偏航阻尼，引用時要說明。</p>`,r:[["BER","滯空線性模型表"]]},
+{s:"perf",t:"燃油管理標準",en:"Fuel management",st:"ok",b:`<p>平飛或進入任務剖面後 30～60 分鐘做一次耗油檢查；實際耗油與計畫值不符、無法保有規定餘油完成飛行時，改採替代方案。戰術任務規劃要求燃油計算誤差在 ±25 lb 內。燃油增壓泵失效時，下降到壓力高度 8,000 ft 以下並儘早落地。</p>`,r:[["TC","Task 1048、1402"],["CL","E-6～E-7"]]},
+{s:"perf",t:"飛行時間與速度概值",en:"Endurance and speed",st:"ok",b:`<p>最大空速 125 kt（64 m/s），巡航 80 kt（41 m/s），航程時間約 2 小時 30 分；組員 2 人，貨物載量 0。</p>`,r:[["AA","p. 16"]]},
+/* ---------- ops ---------- */
+{s:"ops",t:"科目編號規則",en:"Task numbering",st:"ok",b:`<p>完整編號為 10 位數：前三碼 011（陸航學校）、中三碼 248（OH-58D），手冊只寫末四碼。1000 系列為基本科目，2000 系列為任務科目，4000 系列為維修試飛科目。大寫粗體者為「性能科目」（受飛行模式影響），小寫者為「技術科目」（可在任何模式執行）。</p>`,r:[["TC","4-1 a；2-5 d"]]},
+{s:"ops",t:"半年飛行時數與年度要求",en:"Continuation training",st:"ok",b:`<div class="tbl"><table><tr><th>類別</th><th class="num">半年最低時數</th></tr><tr><td>FAC 1</td><td class="num">70 h</td></tr><tr><td>FAC 2</td><td class="num">50 h</td></tr><tr><td>夜視鏡</td><td class="num">9 h</td></tr><tr><td>儀器（hood）</td><td class="num">3 h</td></tr></table></div><p>Task 1074（巡航中發動機失效）每半年兩次；IP／SP 每 90 天一次，OH-58D(R) 的 IP 另須每 90 天做一次 Task 1102。複訓飛行指引共 10 小時（區域熟悉 2.0、基本科目示範與練習 6.0、考核 2.0），儀器另 8 小時。</p>`,r:[["TC","2-2、2-4 a（p. 2-2～2-4）"]]},
+{s:"ops",t:"需由 IP 在座的科目",en:"IP-required tasks",st:"ok",b:`<p>Task 1072、1074、1078、1082、1100、1102 的訓練與考核必須有教官（IP／SP）在一組操縱器上。</p>`,r:[["TC","4-1 b(2)(b)"]]},
+{s:"ops",t:"Task 1038 滯空飛行",en:"Hovering flight",st:"ok",b:`<p>起飛到滯空：3 ft ± 1 ft，航向 ± 10°，飄移不超過 1 ft，依 -CL 依序完成滯空檢查。滯空轉向：等轉率不超過 90°/4 s，樞點位置 ± 2 ft。踏板控航向與轉率，總距控高度與升降率，週期桿控位置與移動方向。雪沙塵條件可改用 10 ft 滯空移動或 20～100 ft 空中滑行（加速到 ETL 以上）。</p>`,r:[["TC","Task 1038（p. 4-28～4-30）"]]},
+{s:"ops",t:"Task 1040 目視起飛",en:"VMC takeoff",st:"ok",b:`<p>50 ft AGL 以上保持配平，加速到預定空速 ± 10 kt，爬升率 ± 100 ft/min（± 0.5 m/s），到預定空速前維持起飛功率。</p>`,r:[["TC","Task 1040（p. 4-31）"]]},
+{s:"ops",t:"Task 1052 目視飛行動作",en:"VMC flight maneuvers",st:"ok",b:`<p>轉彎：空速 ± 10 kt、坡度 ± 10°、高度 ± 100 ft、改出航向 ± 10°。爬升與下降：空速 ± 10 kt、升降率 ± 100 ft/min、航向 ± 10°。平飛：空速 ± 10 kt、高度 ± 100 ft，全程保持配平。</p>`,r:[["TC","Task 1052（p. 4-37）"]]},
+{s:"ops",t:"Task 1058 目視進場與 1066 滑行落地",en:"VMC approach / running landing",st:"ok",b:`<p>兩者都要求進場高度 ± 100 ft、進入空速 ± 10 kt，以適當進場角與接近率平順終止。滑行落地另要求航向與地面軌跡 ± 10°。液壓失效時應選可做滑行落地的場地。</p>`,r:[["TC","Task 1058（p. 4-40）、1066（p. 4-45）"],["CL","E-10"]]},
+{s:"ops",t:"Task 1062 斜坡作業",en:"Slope operations",st:"ok",b:`<p>不超過機體斜坡限制，航向 ± 5°，飄移 ± 1 ft，平順觸地與離地。觸地後以踏板做地面適合性檢查再放低總距。</p>`,r:[["TC","Task 1062（p. 4-43）"]]},
+{s:"ops",t:"Task 1072 滯空中發動機失效",en:"Engine failure at a hover",st:"ok",b:`<p>MMS 關閉、在核定落地區。標準：航向 ± 10°，側向飄移不超過 3 ft，平順觸地且不得後飄。以踏板保持航向、週期桿修正側飄與後飄；若前進中觸發，調整為落地姿態並避免尾低，帶些許前進速度觸地。此動作不使用航向保持（heading hold）。</p>`,r:[["TC","Task 1072（p. 4-48）"]]},
+{s:"ops",t:"Task 1074 巡航中發動機失效",en:"Engine failure at cruise",st:"ok",b:`<p>最低進入高度 1,200 ft AGL，MMS 收存。放低總距維持旋翼轉速、踏板配平，於最小下降率與最大滑翔空速之間調整，最後進場大致對風。IP 須在 400 ft AGL 前把油門推回全開。<b>Power recovery</b>：確認 NP 100 % 後建立正常爬升，200 ft AGL 前完成改出。<b>Terminate with power</b>：在 3～5 ft AGL 把下降率減到零，以落地姿態進入穩定滯空。</p>`,r:[["TC","Task 1074（p. 4-49～4-50）"]]},
+{s:"ops",t:"Task 1078 SCAS 失效",en:"SCAS malfunction",st:"ok",b:`<p>在下風邊按週期桿上的 SCAS 釋放開關，調整到最舒適的操縱空速，以淺進場角完成進場；若終止於滯空，須先落地再接回 SCAS。標準沿用 1040、1052、1058，並保持固定進場角。</p>`,r:[["TC","Task 1078（p. 4-51）"]]},
+{s:"ops",t:"Task 1082 自轉（滯空自轉）",en:"Hovering autorotation",st:"ok",b:`<p>對風 3 ft ± 1 ft 穩定滯空，把油門收到慢車止擋（收油門時不動總距），以右踏板保持航向、週期桿保持位置 ± 1 ft，機體下沉時給足總距平順觸地；不可過度提總距使下降停住，注意側飄與後飄。完成後把 NP 恢復 100 % 並報告油門全開。</p>`,r:[["TC","Task 1082（p. 4-52）"]]},
+{s:"ops",t:"Task 1155 通過電線障礙",en:"Wire obstacles",st:"ok",b:`<p>任務前把已知電線與障礙輸入任務規劃系統並下載到 DTC／DTM，飛行中顯示在 HSD。越過上方時從電桿附近通過以利判斷最高點；從下方穿越的淨空標準見「機體與尺寸」一節。P 可用 MMS 與雷達高度表協助判斷電線高度。</p>`,r:[["TC","Task 1155（p. 4-59～4-60）"]]},
+{s:"ops",t:"Task 1408 地貌飛行三種模式",en:"Terrain flight",st:"ok",b:`<div class="tbl"><table><tr><th>模式</th><th>特徵</th><th>標準</th><th>導航精度</th></tr><tr><td>NOE 貼地</td><td>高度與空速隨植被、障礙與光度變化，儘量貼近地面</td><td>空速視地形、敵情、天候、光度而定</td><td>航線位置 200 m 內，終點 100 m 內</td></tr><tr><td>Contour 循地形</td><td>空速大致固定，高度隨地形起伏</td><td>保持配平</td><td>航線位置 500 m 內，終點 100 m 內</td></tr><tr><td>Low-level 低空</td><td>固定空速與高度</td><td>高度 ± 50 ft、空速 ± 10 KIAS</td><td>同上</td></tr></table></div><p>NOE 需要 OGE 滯空功率。訓練時 NOE 至少導航 20 km，低空或循地形至少 40 km。</p>`,r:[["TC","Task 1408（p. 4-89～4-91）"]]},
+{s:"ops",t:"Task 1410 遮蔽與顯露",en:"Masking and unmasking",st:"ok",b:`<p>需有 OGE 功率。顯露時間不超過 <b>10 秒</b>（手冊說明雷達可在 2～9 秒內鎖定）；使用 MMS 時只露出 MMS；再次顯露前換位置。垂直顯露時保持主旋翼與遮蔽物的水平間距，以備失去動力或需快速隱蔽；常見毛病是上升下降時前後飄移。目標在 2,000～3,000 m 外時，只移動 100 m 仍在對方同一視野內。可使用航向保持。</p>`,r:[["TC","Task 1410（p. 4-95～4-96）"]]},
+{s:"ops",t:"Task 1411 地貌飛行減速",en:"Terrain flight deceleration",st:"ok",b:`<p>航向 ± 10°，尾旋翼始終避開所有障礙物，在選定位置 ± 50 ft 減速到預定速度或停止。做法是先提總距維持尾旋翼高度，再以後拉週期桿減速並持續用總距保持尾旋翼高度。NOE 減速需要 OGE 滯空功率；使用航向保持時要密切注意踏板。</p>`,r:[["TC","Task 1411（p. 4-97）"]]},
+{s:"ops",t:"Task 1170 儀器起飛",en:"Instrument takeoff",st:"ok",b:`<p>起飛功率 ± 2 % 主軸扭力，加速爬升姿態 ± 1 個姿態條寬，航向 ± 10°，ETL 後保持配平，爬升率 ± 100 ft/min。</p>`,r:[["TC","Task 1170（p. 4-63）"]]},
+{s:"ops",t:"Task 1184 誤入儀器天氣",en:"IIMC",st:"ok",b:`<p>立即轉換為儀器飛行並開始爬升，遵守 ATC、地區規定與 SOP。</p>`,r:[["TC","Task 1184（p. 4-73）"]]},
+{s:"ops",t:"Task 2125 山頂與稜線作業",en:"Pinnacle / ridgeline",st:"ok",b:`<p>高空偵察：進入高度 ± 100 ft、空速 ± 10 KIAS。進場：沿選定路徑、固定進場角，做低空偵察，終止點在落地區前三分之一。起飛：先做滯空功率檢查，採「先空速後高度」（airspeed-over-altitude）起飛，航向 ± 10°。</p>`,r:[["TC","Task 2125"]]},
+{s:"ops",t:"Task 2127 戰鬥機動飛行",en:"Combat maneuvering flight",st:"ok",b:`<p>進入高度 ± 100 ft、空速 ± 10 KIAS，保持配平與飛行包絡內。CAUTION：不得超過 -10 第 5 章第 IV 節的空速與機動限制；不可讓下降率過大，全重與密度高度越高越難改出。機長應預想此時發動機失效的處置。</p>`,r:[["TC","Task 2127"]]},
+{s:"ops",t:"組員分工用語",en:"P* / P / PC",st:"ok",b:`<p>P*＝在操縱的飛行員，負責操控、避障與緊急程序執行；P＝不在操縱的飛行員，負責導航、空中計算與協助避障；PC＝機長，負責任務執行與飛機。三者是不同概念，P* 與 P 不代表 PC 職責。</p>`,r:[["TC","1-2 a；4-1 d(1)"]]},
+/* ---------- emer ---------- */
+{s:"emer",t:"處置用語的時限",en:"Land as soon as…",st:"ok",b:`<p>-CL 用三種落地時限：<b>LAND AS SOON AS POSSIBLE</b>（儘速落地）、<b>LAND AS SOON AS PRACTICABLE</b>（擇適當場地落地）、以及直接 <b>AUTOROTATE</b>。底線標示的步驟必須不看檢查表立即執行。緊急程序分為發動機、旋翼傳動、火警、燃油、電氣、液壓、起降與水上迫降、飛控、任務裝備等類。</p>`,r:[["CL","General Information（p. i）"]]},
+{s:"emer",t:"發動機超速與轉速不足",en:"Overspeed / underspeed",st:"ok",b:`<p>超速：先提總距，再以油門調整（ESC）或執行 FADEC 手動（FADEC），無法手動控制轉速時自轉並緊急關車。轉速不足：調整總距、確認油門全開、RPM 微調往上；仍不足則切 ANLG 備份（ESC）或 FADEC 手動。發動機轉速突波或 FUEL CONT 訊息：切 BACKUP 並擇地落地。</p>`,r:[["CL","E-2～E-3"]]},
+{s:"emer",t:"發動機滑油高溫",en:"High oil temp",st:"ok",b:`<p>先把機頭轉向對風或轉入前飛。滑油溫度超過 120 °C（248 °F），或在 107～120 °C（224～248 °F）停留超過 10 秒，儘速落地。</p>`,r:[["CL","E-5"]]},
+{s:"emer",t:"傳動系統",en:"Drive system",st:"ok",b:`<p>主傳動軸失效：油門全開下自轉，落地後緊急關車。離合器無法脫開：保持油門開、儘速落地。離合器無法重新接合：自轉並緊急關車。</p>`,r:[["CL","E-5"]]},
+{s:"emer",t:"火警",en:"Fire",st:"ok",b:`<p>中止起動、熱起動或殘火：按住 START 直到 TGT 低於 200 °C，關油門。地面發動機、機身或電氣火警：緊急關車。低空或巡航中火警：可動力落地則儘速落地後關車，否則自轉。空中電氣火警：關 AC 與 DC 發電機、儘速落地。排煙：拉開通風、開除霧與艙室鼓風機。</p>`,r:[["CL","E-5～E-6"]]},
+{s:"emer",t:"液壓失效",en:"Hydraulic failure",st:"ok",b:`<p>調整空速，先拔液壓斷路器看是否恢復；未恢復則插回斷路器、把 HYD SYS 開關關閉，且本次飛行不得再打開，以免液壓突波造成操縱面突然動作。選可做滑行落地的場地擇地落地。</p>`,r:[["CL","E-10"]]},
+{s:"emer",t:"SCAS 脫開",en:"SCAS failure",st:"ok",b:`<p>嘗試重新接合受影響的頻道；無法接合則擇地落地。P/R DISENG 與 YAW DISENG 訊息都依 SCAS 失效程序處理。</p>`,r:[["CL","E-11；表 E-2"]]},
+{s:"emer",t:"雷擊、撞線與樹林迫降",en:"Strike / wires / trees",st:"ok",b:`<p>雷擊與空中撞線：儘速落地。只能迫降在樹林時，選樹最少、最矮的區域，在樹梢高度減到最小前進速度後垂直下降，主旋翼碰到樹前用完剩餘總距。</p>`,r:[["CL","E-10～E-11"]]},
+{s:"emer",t:"水上迫降",en:"Ditching",st:"ok",b:`<p>有動力：在滯空時拋門，讓副駕駛或乘客先離機，飛到安全距離外自轉入水，入水時用完總距；機體開始翻滾時週期桿往翻滾方向壓，主旋翼停止後離機。無動力：自轉，入水時拋門，主旋翼停止後離機。</p>`,r:[["CL","E-11"]]},
+{s:"emer",t:"警告訊息（紅色）",en:"Warning messages",st:"ok",b:`<div class="tbl"><table><tr><th>訊息</th><th>處置</th></tr><tr><td>ENGINE OUT</td><td>確認後自轉</td></tr><tr><td>ENG OVER TRQ／XMSN OVER TRQ／TGT OVER TEMP／LOW FUEL PRESSURE</td><td>儘速落地</td></tr><tr><td>HIGH ROTOR RPM／LOW ROTOR RPM</td><td>確認後調整總距</td></tr><tr><td>FADEC FAIL／FADEC MANUAL</td><td>依 FADEC 失效程序</td></tr></table></div>`,r:[["CL","表 E-1"]]},
+{s:"emer",t:"注意訊息中的時限計時",en:"Time-limit cautions",st:"ok",b:`<p>HIGH TGT TIME LIM、MAST TRQ TIME LIM、TGT 5 MIN LIM、TGT 30 MIN LIM 出現時調整總距；括號內顯示的是累計秒數（最多 99 秒），不受單一時段限制。LOW OIL PRESS ENG／XMSN、LOW OIL QUANTITY ENG、OIL BYP ENG：儘速落地。</p>`,r:[["CL","表 E-2"]]},
+{s:"emer",t:"關車程序重點",en:"Engine shutdown",st:"ok",b:`<p>週期桿置中、踏板中立、總距放到底後啟用力配平；MMS 在 NP 降到 95 % 前關閉；油門收到慢車運轉 2 分鐘；關車前檢查並記錄 ENGINE／FADEC MONITOR 與 ENGINE HISTORY 頁面中的故障與超限值；主旋翼停止後才關電瓶與燈光。</p>`,r:[["CL","N-10～N-11"]]},
+/* ---------- lte ---------- */
+{s:"lte",t:"LTE 問題源自 OH-58 機系",en:"History",st:"ok",b:`<p>1970 年代美國陸軍的 OH-58A 發生多起飛行員在包絡內卻止不住右偏航的事故。調查發現持續踩滿左踏板最有效；Bell 1983 年發出第一份操作安全通告，1984 年資訊信函提出三個干擾區，成為 1995 年 FAA AC 90-95 與《Helicopter Flying Handbook》LTE 章節的基礎。</p>`,r:[["FFX","The History"],["DEQ","§1–2"]]},
+{s:"lte",t:"AC 90-95 的三個風向區",en:"Critical azimuths",st:"ok",b:`<div class="tbl"><table><tr><th>機制</th><th class="num">相對風方位</th></tr><tr><td>主旋翼渦流干擾（main rotor disc vortex）</td><td class="num">285°～315°</td></tr><tr><td>尾旋翼渦環狀態（tail rotor VRS）</td><td class="num">210°～330°</td></tr><tr><td>風標穩定（weathercock）</td><td class="num">120°～240°</td></tr></table></div><p>右偏航一旦在這些區域開始，每次轉過風標穩定區都會再加速。</p>`,r:[["FFX","The History"]]},
+{s:"lte",t:"踏板配平曲線的觀點",en:"Pedal trim curve",st:"ok",b:`<p>Airbus 的 Dequin 主張用「配平踏板位置對相對風方位」的曲線解釋非預期偏航：曲線近似正弦，逆時針主旋翼在右側風時需最多左踏板。風速越大振幅越大；Bell 206／OH-58 在 40 kt 右側風時尾旋翼已無法保持航向。提總距會讓整條曲線往左踏板止擋移動。</p><p>頂風與尾風都會減少左踏板需求，右側風需要比無風更多的左踏板；尾風則屬方向不穩定區，機體會大幅偏航後才找到新的配平點。</p>`,r:[["DEQ","§4"],["FFX","pedal trim curve 圖說"]]},
+{s:"lte",t:"事故統計與改出重點",en:"Accidents and recovery",st:"ok",b:`<p>Dequin 分析各國事故資料庫，平均每年超過 18 件，約四分之三發生在離地很近的高度，AC 90-95 建議的前推週期桿改出在此並不適用。主要原因是改出時踏板修正幅度不夠或太晚。結論是：除了功率受限的情況，及時踩足踏板（必要時到止擋）一定能止住偏航。Flightfax 補充：高度允許時略降總距可讓配平點往右移，釋出更多左踏板。</p>`,r:[["DEQ","Abstract；§7 Conclusion"],["FFX","recovery"]]},
+{s:"lte",t:"美軍教學現況",en:"Training status",st:"ok",b:`<p>Flightfax 指出陸航學校自 2016 年起把非指令偏航從課程中移除，2024 會計年度可能是尾旋翼相關事故最多的一年。常見情境包括：低速尾風下未監控偏航軸，以及由下風邊下降減速右轉入最後進場時，未預期需要大量總距與左踏板。</p>`,r:[["FFX","開篇與 THE VERY BASICS"]]},
+/* ---------- refs ---------- */
+{s:"refs",t:"TC 1-248 Aircrew Training Manual OH-58D",en:"12 April 2007",st:"ok",b:`<p>Distribution Restriction：Approved for public release; distribution is unlimited。取代 2005-09-12 版。本資料庫主要來源。</p>`,r:[["TC","封面"]]},
+{s:"refs",t:"TM 1-1520-248-CL Checklist",en:"30 April 1999 + C1",st:"ok",b:`<p>Distribution Statement A。C1（2000-06-15）亦為 A。掃描檔缺 E-1、E-4、E-14 等頁，引用時請對照完整版。</p>`,r:[["CL","封面、C1"]]},
+{s:"refs",t:"TM 55-2840-256-23 T703 Engine",en:"2 June 1986 + C9 (1998)",st:"ok",b:`<p>Distribution Statement A。只取用第 1 章設備說明與資料。</p>`,r:[["T7","封面"]]},
+{s:"refs",t:"Air Assault School Handbook FY2013",en:"Warrior Training Center",st:"ok",b:`<p>公開訓練手冊，屬二手彙整資料；其 OH-58D 頁引用 TM 1-1520-248-10 與 FM 3-04.126。</p>`,r:[["AA","p. 2、16"]]},
+{s:"refs",t:"FM 1-140 Helicopter Gunnery",en:"29 March 1996",st:"ok",b:`<p>Distribution Restriction：Approved for public release。本資料庫用的是第三方重印本（註明內容已核准公開）。只取開火模式定義與 .50 口徑彈道表。</p>`,r:[["FM","封面"]]},
+{s:"refs",t:"TM 1-1520-248-10 Operator's Manual",en:"15 November 2001",st:"pend",b:`<p>先前確認為 Distribution A、704 頁、無改為 C 的變更頁。原 PDF 目前無法取得，相關條目標「待核」，待重新上傳後逐頁核對並擴充系統說明、限制與性能章節。<b>2007-07-02 版為 Distribution C，不收錄。</b></p>`,r:[["TM10","封面（先前核對紀錄）"]]},
+{s:"refs",t:"研究文獻",en:"Open literature",st:"sec",b:`<ul><li>Kim, ARL-TR-3180 (2004), Analytical Calculation of Helicopter Main Rotor Blade Flight Loads in Hover and Forward Flight（Distribution A）</li><li>Berger et al. (2011), Improved Handling Qualities for the OH-58D Kiowa Warrior in the Degraded Visual Environment, AHS 67th Forum</li><li>Dequin, A.-M. (2019), The Myth of Losing Tail Rotor Effectiveness, 45th ERF, Paper 17（CC BY）</li><li>Nixon, C. (2025), Understanding the Performance and Limitations of the Tail Rotor in Single Main Rotor Helicopters, Flightfax Special Edition</li></ul>`,r:[]},
+{s:"refs",t:"不收錄的文件",en:"Excluded (restricted)",st:"ok",b:`<p>以下文件分發受限，本資料庫未摘錄任何內容：TM 1-1520-248-10（2007 版，Dist C）、TM 1-1520-248-MTF（Dist C）、TM 9-1240-778-23 MMS 維修技令（限 DoD，含出口管制）、TM 11-1520-248-23-1（Dist C）、FM 3-04.140（限 DoD）。</p>`,r:[]}
+];
+const GL=[["AGL","above ground level 離地高度"],["AHO","above highest obstacle 高於最高障礙物"],["ADSS","ANVIS display symbology subsystem 夜視鏡符號顯示"],["ANLG","analog（ESC 類比備份）"],["ANVIS","aviator's night vision imaging system 飛行員夜視系統"],["APART","annual proficiency and readiness test 年度熟練度考核"],["ASE","aircraft survivability equipment 機載存活裝備"],["ATAS","air-to-air Stinger 空對空刺針"],["ATM","aircrew training manual 空勤訓練手冊"],["AVTR","airborne video tape recorder 機載錄影機"],["BFT","Blue Force Tracker 藍軍追蹤"],["BIT","built-in test 內建測試"],["CDS","control and display subsystem 控制顯示系統"],["CG","center of gravity 重心"],["CPG","copilot-gunner 副駕駛／射手"],["DA","density altitude 密度高度"],["DTC / DTM","data transfer cartridge / module 資料傳輸匣"],["EGI","embedded GPS/INS 嵌入式衛星慣性導航"],["ESC","electronic supervisory control 電子監督控制"],["ETL","effective translational lift 有效平移升力"],["FADEC","full authority digital electronic control 全權數位發動機控制"],["FAC","flight activity category 飛行活動類別"],["FAT","free air temperature 外氣溫度"],["FFAR","folding fin aerial rocket 折翼火箭"],["FOV / WFOV","field of view / wide FOV 視野／寬視野"],["GWT","gross weight 全重"],["HHM","heading hold mode 航向保持"],["HMS","Hellfire missile system 地獄火飛彈系統"],["HMU","hydromechanical unit 液壓機械燃油控制"],["HSD","horizontal situation display 水平狀況顯示"],["IDM","improved data modem 改良式數據機"],["IGE / OGE","in / out of ground effect 地面效應內／外"],["IIMC","inadvertent IMC 誤入儀器天氣"],["IMSP","improved MMS system processor 改良式 MMS 處理器"],["IP / SP","instructor / standardization instructor pilot 教官／標準化教官"],["ISP","integrated system processor 整合系統處理器"],["KIAS","knots indicated airspeed 指示空速（節）"],["LOAL / LOBL","lock-on after / before launch 發射後／前鎖定"],["LRF/D","laser range finder/designator 雷射測距標定器"],["MCPU","master controller processor unit 主控處理單元"],["MFD / MFK","multifunction display / keyboard 多功能顯示器／鍵盤"],["MMS","mast-mounted sight 桅頂觀測儀"],["MQ","mast torque 主軸扭力"],["MTF / MTP","maintenance test flight / pilot 維修試飛／試飛員"],["Ng / Np / Nr","gas generator / power turbine / rotor speed"],["NOE","nap-of-the-earth 貼地飛行"],["NVG","night vision goggles 夜視鏡"],["P* / P / PC","pilot on controls / pilot not on controls / pilot in command"],["PA","pressure altitude 壓力高度"],["PLA","power level angle 油門桿角度"],["PPC","performance planning card 性能計畫卡"],["RL","readiness level 戰備等級"],["SCAS","stability and control augmentation system 增穩系統"],["TGT","turbine gas temperature 渦輪燃氣溫度（亦作 target）"],["TIS / TVS","thermal imaging / television sensor 熱像／電視感測器"],["TQ","torque 扭力"],["VIXL","video image cross-link 影像交換"],["VSD","vertical situation display 垂直狀況顯示"],["Vne","velocity never exceed 極限速度"],["XMSN","transmission 主傳動"]];
+
+const $=s=>document.querySelector(s);
+const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+let stFilter=null;
+function textOf(e){return (e.t+" "+e.en+" "+e.b.replace(/<[^>]+>/g," ")+" "+e.r.map(x=>SRC[x[0]]+" "+x[1]).join(" ")).toLowerCase()}
+E.forEach(e=>e._x=textOf(e));
+function hl(html,q){if(!q)return html;const re=new RegExp("("+q.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+")","gi");return html.split(/(<[^>]+>)/).map(p=>p.startsWith("<")?p:p.replace(re,"<mark>$1</mark>")).join("")}
+function render(){
+  const q=$("#q").value.trim(), ql=q.toLowerCase();
+  const terms=ql.split(/\s+/).filter(Boolean);
+  let html="",toc="",total=0;
+  SECS.forEach(([id,name,lead],i)=>{
+    let items=[];
+    if(id==="gloss"){
+      const g=GL.filter(([a,d])=>!terms.length||terms.every(t=>(a+" "+d).toLowerCase().includes(t)));
+      if(stFilter&&stFilter!=="ok")return;
+      if(!g.length)return;
+      total+=g.length;
+      html+=`<section class="sec" id="${id}"><h2><span class="no">${String(i+1).padStart(2,"0")}</span>${name}</h2><p class="lead">${lead}</p><div class="gl">${g.map(([a,d])=>`<div><code>${hl(esc(a),q)}</code><span>${hl(esc(d),q)}</span></div>`).join("")}</div><div class="ref"><span class="tag t-ok">已核</span><span>${SRC.TC}，Glossary；${SRC.CL}</span></div></section>`;
+      toc+=`<li><a href="#${id}"><span>${name}</span><span class="n">${g.length}</span></a></li>`;return;
+    }
+    items=E.filter(e=>e.s===id&&(!stFilter||e.st===stFilter)&&terms.every(t=>e._x.includes(t)));
+    if(!items.length)return;
+    total+=items.length;
+    toc+=`<li><a href="#${id}"><span>${name}</span><span class="n">${items.length}</span></a></li>`;
+    html+=`<section class="sec" id="${id}"><h2><span class="no">${String(i+1).padStart(2,"0")}</span>${name}</h2><p class="lead">${lead}</p><div class="entries">`+items.map(e=>{
+      const [lab,cls]=ST[e.st];
+      const refs=e.r.map(([k,loc])=>`<span>${esc(SRC[k])}　${esc(loc)}</span>`).join("");
+      return `<article class="e"><h3>${hl(esc(e.t),q)}<span class="en">${hl(esc(e.en),q)}</span></h3><div class="body">${hl(e.b,q)}</div><div class="ref"><span class="tag ${cls}">${lab}</span>${refs||"<span>整理說明</span>"}</div></article>`}).join("")+`</div></section>`;
+  });
+  $("#main").innerHTML=html||`<p class="empty">找不到符合「${esc(q)}」的條目。試試英文術語（例如 hover、torque）或科目編號。</p>`;
+  $("#toc").innerHTML=toc;
+  $("#count").textContent=`${total} 筆`;
+}
+const chips=[[null,"全部"],["ok","已核"],["pend","待核"],["sec","二手"],["der","推導"]];
+$("#stchips").innerHTML=chips.map(([k,l])=>`<button type="button" class="chip" data-k="${k??""}" aria-pressed="${k===null}">${l}</button>`).join("");
+$("#stchips").addEventListener("click",ev=>{const b=ev.target.closest(".chip");if(!b)return;stFilter=b.dataset.k||null;document.querySelectorAll("#stchips .chip").forEach(c=>c.setAttribute("aria-pressed",c===b));render()});
+let tmr;$("#q").addEventListener("input",()=>{clearTimeout(tmr);tmr=setTimeout(render,120)});
+$("#theme").addEventListener("click",()=>{const r=document.documentElement;const dark=r.dataset.theme?r.dataset.theme==="dark":matchMedia("(prefers-color-scheme: dark)").matches;r.dataset.theme=dark?"light":"dark";try{localStorage.setItem("oh58d-theme",r.dataset.theme)}catch(e){}});
+try{const t=localStorage.getItem("oh58d-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}
+render();
+if(location.hash){const el=document.getElementById(location.hash.slice(1));if(el)el.scrollIntoView()}
+</script>
+</body>
+</html>
